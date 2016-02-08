@@ -10,7 +10,7 @@ return array(
     ),
     'appNameAndroid' => array(
         'environment' =>'production',
-        'apiKey'      =>'AIzaSyDoNX0-Gz3jV6Wp5xfGkFe8HBB675DbSlI',
+        'apiKey'      =>'AIzaSyALv2cuCCz9zItQF6RJPadSxFvJw--gDrA',
         'service'     =>'gcm'
     )
 

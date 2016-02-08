@@ -21,9 +21,15 @@ class push extends Controller
         $deviceToken = $input['deviceToken'];
         $mensaje = $input['msj'];
 
-        PushNotification::app('appNameAndroid')
+        /*PushNotification::app('appNameAndroid')
             ->to($deviceToken)
-            ->send($mensaje);
+            ->send($mensaje);*/
+
+
+        $collection = PushNotification::app('appNameAndroid')
+        ->to($deviceToken);
+        $collection->adapter->setAdapterParameters(['sslverifypeer' => false]);
+        $collection->send($mensaje);
         return $input;
     }
 }
