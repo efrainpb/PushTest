@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::post('/sendPush', 'push@sendPush');
+Route::post('/register', 'push@register');
 
 /*
 |--------------------------------------------------------------------------

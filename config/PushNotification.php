@@ -11,7 +11,7 @@ array(
 
     'android' => [
         'environment' => env('ANDROID_PUSH_ENV', 'development'),
-        'apiKey'      => env('ANDROID_PUSH_API_KEY', 'AIzaSyDoNX0-Gz3jV6Wp5xfGkFe8HBB675DbSlI'),
+        'apiKey'      => env('ANDROID_PUSH_API_KEY', 'AIzaSyALv2cuCCz9zItQF6RJPadSxFvJw--gDrA'),
         'service'     => 'gcm'
     ]
 );
