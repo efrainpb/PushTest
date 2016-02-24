@@ -17,7 +17,7 @@ Route::get('/', function () {
 
 Route::post('/sendPush', 'push@sendPush');
 Route::post('/register', 'push@register');
-
+Route::post('/pushIOS', 'push@pushIOS');
 /*
 |--------------------------------------------------------------------------
 | Application Routes

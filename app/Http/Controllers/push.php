@@ -10,58 +10,44 @@ use Illuminate\Support\Facades\Hash;
 use Request;
 use Auth;
 use View;
-use PushNotification;
 
 class push extends Controller
 {
-    //
+
     public function sendPush()
     {
         $input = Request::all();
         $deviceToken = $input['deviceToken'];
-        $mensaje = $input['msj'];
+        $mensaje = urldecode($input['msj']);
+        $id = $input['id'];
+        $action = $input['action'];
 
-
-        /*$collection = PushNotification::app('appNameAndroid')
-        ->to($deviceToken);
-        $collection->adapter->setAdapterParameters(['sslverifypeer' => false]);
-        $collection->send($mensaje);
-        return $input;*/
-        define("GOOGLE_API_KEY", "AIzaSyD1g2l-rMWpsHnyxc-0knxKVTCVIsRRXP4");
+        define("GOOGLE_API_KEY", "AIzaSyDMTcK3dTniG11HU8IovSInhPE_uR0YbLI");
         $url = 'https://gcm-http.googleapis.com/gcm/send';
 
         $fields = array(
             'registration_ids' => array($deviceToken),
-            'data' => array("product" => "shirt"),
+            'data' => array("id"=>$id,"action"=>$action,"mensaje" => $mensaje,"data"=>["var1"=>1,"var2"=>2]),
         );
 
         $headers = array(
             'Authorization: key=' . GOOGLE_API_KEY,
             'Content-Type: application/json'
         );
-        //print_r($headers);
-        // Open connection
         $ch = curl_init();
 
-        // Set the url, number of POST vars, POST data
         curl_setopt($ch, CURLOPT_URL, $url);
-
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Disabling SSL Certificate support temporarly
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
 
-        // Execute post
         $result = curl_exec($ch);
-        if ($result === FALSE) {
-            die('Curl failed: ' . curl_error($ch));
-        }
+        if ($result === FALSE)
+            die('Curl error: '.curl_error($ch));
 
-        // Close connection
         curl_close($ch);
         return $result;
     }
@@ -70,5 +56,48 @@ class push extends Controller
     {
         $input = Request::all();
         return $input;
+    }
+
+    public function pushIOS()
+    {
+        $input = Request::all();
+        $message = $input['msj'];
+        $deviceToken=$input['deviceToken'];
+        $message = urldecode($message);
+        $passphrase = '6243mu33';
+        $cert = realpath('scapp.pem');
+        $payload = '{
+        "aps" :
+            {
+                "alert" : "'.$message.'",
+                "badge" : "q",
+                "sound" : "default"
+            }
+         }';
+
+        $ctx = stream_context_create();
+        stream_context_set_option($ctx, 'ssl', 'local_cert', $cert);
+        stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
+
+        $fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+
+        if (!$fp)
+        {
+            return;
+        }
+        else
+        $dev_array = array($deviceToken);
+
+        foreach ($dev_array as $device_token)
+        {
+            $msg =  chr(0) .
+                pack("n", 32) .
+                pack('H*', str_replace(' ', '', $device_token)) .
+                pack("n", strlen($payload)) .
+                $payload;
+            $response = fwrite($fp, $msg);
+        }
+        fclose($fp);
+        return $response;
     }
 }
