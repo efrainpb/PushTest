@@ -21,6 +21,7 @@ Si se está en ambiente de desarrollo hay que envíar a ssl://gateway.sandbox.pu
 
 Si se está en ambiente de producción hay que envíar a ssl://gateway.push.apple.com:2195
 
+Send
 {
     deviceToken: ###################,
     msj: Un mensaje para la push notification
