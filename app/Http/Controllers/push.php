@@ -22,7 +22,7 @@ class push extends Controller
         $id = $input['id'];
         $action = $input['action'];
 
-        define("GOOGLE_API_KEY", "###########");
+        define("GOOGLE_API_KEY", "AIzaSyDMTcK3dTniG11HU8IovSInhPE_uR0YbLI");
         $url = 'https://gcm-http.googleapis.com/gcm/send';
 
         $fields = array(
@@ -64,7 +64,7 @@ class push extends Controller
         $message = $input['msj'];
         $deviceToken=$input['deviceToken'];
         $message = urldecode($message);
-        $passphrase = '#######';
+        $passphrase = '6243mu33';
         $cert = realpath('scapp.pem');
         $payload = '{
         "aps" :
