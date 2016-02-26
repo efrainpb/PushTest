@@ -62,7 +62,6 @@ class push extends Controller
     {
         $input = Request::all();
         $message = $input['msj'];
-        $deviceToken=$input['deviceToken'];
         $message = urldecode($message);
         $passphrase = '6243mu33';
         $cert = realpath('scapp.pem');
@@ -86,7 +85,7 @@ class push extends Controller
             return;
         }
         else
-        $dev_array = array($deviceToken);
+        $dev_array = $input['deviceToken'];
 
         foreach ($dev_array as $device_token)
         {
