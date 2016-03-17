@@ -27,7 +27,10 @@ class push extends Controller
 
         $fields = array(
             'registration_ids' => array($deviceToken),
-            'data' => array("id"=>$id,"action"=>$action,"mensaje" => $mensaje,"data"=>["var1"=>1,"var2"=>2]),
+            'data' => array(
+                "title"=>"Superchamba",
+                "message" => $mensaje),
+            "collapse_key" => $id
         );
 
         $headers = array(
@@ -64,7 +67,15 @@ class push extends Controller
         $message = $input['msj'];
         $message = urldecode($message);
         $passphrase = '6243mu33';
-        $cert = realpath('scapp.pem');
+        $development = true;
+        if($development){
+            $apns_url = 'ssl://gateway.sandbox.push.apple.com:2195';
+            $cert = realpath('scapp.pem');
+        }
+        else {
+            $apns_url = 'ssl://gateway.push.apple.com:2195';
+            $cert = realpath('scapp_production.pem');
+        }
         $payload = '{
         "aps" :
             {
@@ -78,14 +89,14 @@ class push extends Controller
         stream_context_set_option($ctx, 'ssl', 'local_cert', $cert);
         stream_context_set_option($ctx, 'ssl', 'passphrase', $passphrase);
 
-        $fp = stream_socket_client('ssl://gateway.sandbox.push.apple.com:2195', $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+        $fp = stream_socket_client($apns_url, $err, $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
 
         if (!$fp)
         {
             return;
         }
         else
-        $dev_array = $input['deviceToken'];
+        $dev_array = array($input['deviceToken']);
 
         foreach ($dev_array as $device_token)
         {
