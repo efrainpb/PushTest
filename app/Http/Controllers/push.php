@@ -74,7 +74,7 @@ class push extends Controller
         }
         else {
             $apns_url = 'ssl://gateway.push.apple.com:2195';
-            $cert = realpath('scapp_production.pem');
+            $cert = realpath('pushproduction.pem');
         }
         $payload = '{
         "aps" :
