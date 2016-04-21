@@ -67,7 +67,7 @@ class push extends Controller
         $message = $input['msj'];
         $message = urldecode($message);
         $passphrase = '6243mu33';
-        $development = true;
+        $development = false;
         if($development){
             $apns_url = 'ssl://gateway.sandbox.push.apple.com:2195';
             $cert = realpath('scapp.pem');
